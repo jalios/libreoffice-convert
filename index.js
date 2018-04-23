@@ -4,7 +4,7 @@ var path = require('path');
 var async = require('async');
 var exec = require('child_process').exec;
 
-exports.convert = function(document, format, filter, callback) {
+exports.convert = function(document, format, filter, callback, debug=false) {
     return async.auto({
         soffice: function(callback) {
             function paths() {
@@ -54,6 +54,10 @@ exports.convert = function(document, format, filter, callback) {
                 command += ':"'+filter+'"';
             }
             command += ' --outdir '+results.tempDir+' '+path.join(results.tempDir, 'source');
+
+            if(debug){
+                process.stdout.write("command : "+command+"\n")
+            }
 
             return exec(command, function (err, stdout, stderr) {
                 if (err) {
